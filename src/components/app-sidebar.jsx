@@ -1,10 +1,27 @@
-import { Activity, Calendar, Dumbbell, FlameIcon, LineChart, ListChecks, Settings2, Timer, Trophy } from "lucide-react"
+import {
+  Activity,
+  Calendar,
+  Dumbbell,
+  FlameIcon,
+  LineChart,
+  ListChecks,
+  Settings2,
+  Timer,
+  Trophy,
+  Bell,
+} from "lucide-react";
 
-import { NavMain } from "./nav-main"
-import { NavExercises } from "./nav-exercises"
-import { NavUser } from "./nav-user"
-import { PlanSwitcher } from "./plan-switcher"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { NavMain } from "./nav-main";
+import { NavExercises } from "./nav-exercises";
+import { NavUser } from "./nav-user";
+import { PlanSwitcher } from "./plan-switcher";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarRail,
+} from "@/components/ui/sidebar";
 
 // This is sample data for a gym app
 const data = {
@@ -66,7 +83,7 @@ const data = {
         },
         {
           title: "Create Workout",
-          url: "#",
+          url: "/workoutplan",
         },
         {
           title: "Workout History",
@@ -113,6 +130,21 @@ const data = {
       ],
     },
     {
+      title: "Notifications",
+      url: "/notifications",
+      icon: Bell,
+      items: [
+        {
+          title: "Read Notifications",
+          url: "/notifications",
+        },
+        {
+          title: "Read Messages",
+          url: "/messages",
+        },
+      ],
+    },
+    {
       title: "Settings",
       url: "#",
       icon: Settings2,
@@ -149,13 +181,11 @@ const data = {
       icon: Trophy,
     },
   ],
-}
+};
 
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
   return (
-    (<Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <PlanSwitcher plans={data.plans} />
       </SidebarHeader>
@@ -167,6 +197,6 @@ export function AppSidebar({
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
-    </Sidebar>)
+    </Sidebar>
   );
 }

@@ -53,7 +53,7 @@ export function LoginForm({ className, ...props }) {
             </div>
             <div className="mt-4 text-sm text-center">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <a href="/register" className="underline underline-offset-4">
                 Sign up
               </a>
             </div>
