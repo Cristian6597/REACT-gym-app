@@ -9,6 +9,7 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import WorkoutPlanPage from "./pages/WorkoutPlanPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import TrainerPage from "./pages/TrainerPage.jsx";
+import MessagePage from "./pages/MessagePage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/workoutplan" element={<WorkoutPlanPage />} />
           <Route path="/client_profile" element={<ProfilePage />} />
           <Route path="/trainer" element={<TrainerPage />} />
+          <Route path="/message" element={<MessagePage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

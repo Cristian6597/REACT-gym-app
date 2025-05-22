@@ -173,7 +173,7 @@ export default function Page() {
                   {trainers[currentIndex].name}
                 </div>
 
-                <Link to="/chat">
+                <Link to="/message">
                   <Button variant="outline" className="flex items-center gap-2">
                     <MessageCircle className="w-4 h-4" />
                     Chat with trainer

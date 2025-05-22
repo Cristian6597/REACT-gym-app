@@ -138,7 +138,7 @@ const data = {
         },
         {
           title: "Read Messages",
-          url: "/messages",
+          url: "/message",
         },
       ],
     },
