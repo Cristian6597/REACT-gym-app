@@ -30,6 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
@@ -92,7 +93,7 @@ export function NavUser({ user }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/*  <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Medal className="w-4 h-4 mr-2" />
                 <span>Workouts: {user.stats.workouts}</span>
@@ -102,12 +103,14 @@ export function NavUser({ user }) {
                 <span>Streak: {user.stats.streak} days</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator /> */}
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User className="w-4 h-4 mr-2" />
-                Profile
-              </DropdownMenuItem>
+              <Link to="/client_profile">
+                <DropdownMenuItem>
+                  <User className="w-4 h-4 mr-2" />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <BadgeCheck className="w-4 h-4 mr-2" />
                 Achievements

@@ -22,6 +22,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 // This is sample data for a gym app
 const data = {
@@ -60,7 +62,7 @@ const data = {
       items: [
         {
           title: "Overview",
-          url: "#",
+          url: "/",
         },
         {
           title: "Weekly Stats",
@@ -78,20 +80,16 @@ const data = {
       icon: Dumbbell,
       items: [
         {
-          title: "My Routines",
+          title: "My Workouts",
           url: "#",
         },
         {
           title: "Create Workout",
           url: "/workoutplan",
         },
-        {
-          title: "Workout History",
-          url: "#",
-        },
       ],
     },
-    {
+    /* {
       title: "Progress",
       url: "#",
       icon: LineChart,
@@ -128,7 +126,7 @@ const data = {
           url: "#",
         },
       ],
-    },
+    }, */
     {
       title: "Notifications",
       url: "/notifications",
@@ -144,28 +142,9 @@ const data = {
         },
       ],
     },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Account",
-          url: "#",
-        },
-        {
-          title: "Notifications",
-          url: "#",
-        },
-        {
-          title: "Preferences",
-          url: "#",
-        },
-      ],
-    },
   ],
   exercises: [
-    {
+    /* {
       name: "Chest & Triceps",
       url: "#",
       icon: Dumbbell,
@@ -179,7 +158,7 @@ const data = {
       name: "Legs & Core",
       url: "#",
       icon: Trophy,
-    },
+    }, */
   ],
 };
 
@@ -193,8 +172,11 @@ export function AppSidebar({ ...props }) {
         <NavMain items={data.navMain} />
         <NavExercises exercises={data.exercises} />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="w-full">
         <NavUser user={data.user} />
+        <Link to="/trainer">
+          <Button className="w-full">Collab with us</Button>
+        </Link>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
