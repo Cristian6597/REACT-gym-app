@@ -25,6 +25,7 @@ import { useState } from "react";
 import { Button } from "./components/ui/button";
 import { MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { FitnessRecepieCarousel } from "./components/FitnessRecepieCarousel";
 
 const trainers = [
   {
@@ -208,6 +209,7 @@ export default function Page() {
               </CardContent>
             </div>
           </Card>
+          <FitnessRecepieCarousel />
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -1,0 +1,166 @@
+.fitness-carousel-container {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.carousel-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-content {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  flex: 0 0 calc(100% / 3);
+  padding: 0.5rem;
+}
+
+.recipe-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.recipe-image-container {
+  position: relative;
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.recipe-category {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.recipe-content {
+  padding: 1rem;
+  flex: 1;
+}
+
+.recipe-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.recipe-description {
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.recipe-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.recipe-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 0.25rem;
+}
+
+.recipe-metrics {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--muted-text);
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.carousel-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: color 0.3s;
+}
+
+.carousel-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+
+.carousel-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: var(--muted-text);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.carousel-indicator.active {
+  background-color: var(--accent-text);
+}
+
+/* Theme Variables */
+:root {
+  --bg-color: #fff;
+  --text-color: #111;
+  --muted-text: #555;
+  --card-bg: #f9f9f9;
+  --tag-bg: #e0e0e0;
+  --tag-text: #333;
+  --accent-bg: #d1e8ff;
+  --accent-text: #007bff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --muted-text: #bbb;
+    --card-bg: #1f1f1f;
+    --tag-bg: #333;
+    --tag-text: #eee;
+    --accent-bg: #003366;
+    --accent-text: #66b2ff;
+  }
+}
