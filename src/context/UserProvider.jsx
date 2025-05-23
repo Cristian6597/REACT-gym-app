@@ -9,14 +9,30 @@ const userContext = createContext({
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
   const myaxios = useAxios();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const fetchUser = async () => {
+      const token = localStorage.getItem("api_token");
+      if (!token) {
+        setUser(undefined);
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await myaxios.get("/api/auth/user");
+        setUser(response.data.user);
+      } catch (error) {
+        localStorage.removeItem("api_token");
+        setUser(undefined);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const handleLogin = async (data) => {
@@ -28,18 +44,16 @@ const UserProvider = ({ children }) => {
       navigate("/");
       return null;
     } catch (error) {
-      console.log(error);
       return error.response?.data?.message || "Errore durante il login";
     }
   };
 
   return (
-    <userContext.Provider value={{ handleLogin, user }}>
-      {children}
+    <userContext.Provider value={{ handleLogin, user, loading }}>
+      {!loading && children}
     </userContext.Provider>
   );
 };
 
 export default UserProvider;
-
 export const useUser = () => useContext(userContext);

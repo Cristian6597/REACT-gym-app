@@ -12,6 +12,8 @@ import TrainerPage from "./pages/TrainerPage.jsx";
 import MessagePage from "./pages/MessagePage.jsx";
 import AxiosProvider from "./context/AxiosProvider.jsx";
 import UserProvider from "./context/UserProvider.jsx";
+import GuestLayout from "./layouts/GuestLayout.jsx";
+import ProtectedLayout from "./layouts/ProtectedLayout";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -20,13 +22,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <AxiosProvider>
           <UserProvider>
             <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/workoutplan" element={<WorkoutPlanPage />} />
-              <Route path="/client_profile" element={<ProfilePage />} />
-              <Route path="/trainer" element={<TrainerPage />} />
-              <Route path="/message" element={<MessagePage />} />
+              {/* Rotte protette */}
+              <Route element={<ProtectedLayout />}>
+                <Route path="/" element={<App />} />
+                <Route path="/workoutplan" element={<WorkoutPlanPage />} />
+                <Route path="/client_profile" element={<ProfilePage />} />
+                <Route path="/trainer" element={<TrainerPage />} />
+                <Route path="/message" element={<MessagePage />} />
+              </Route>
+
+              {/* Rotte guest */}
+              <Route element={<GuestLayout />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+              </Route>
             </Routes>
           </UserProvider>
         </AxiosProvider>
