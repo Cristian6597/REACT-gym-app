@@ -16,7 +16,7 @@ const AxiosProvider = ({ children }) => {
   useEffect(() => {
     myaxios.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("api_token");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -26,14 +26,11 @@ const AxiosProvider = ({ children }) => {
     );
 
     myaxios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
+      (response) => response,
       (error) => {
         console.log(error);
-        if (error.status === 401) {
-          // window.location.href = '/login';
-          localStorage.removeItem("token");
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("api_token");
           localStorage.removeItem("user");
           window.location.href = "/login";
         }
