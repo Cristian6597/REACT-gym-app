@@ -1,4 +1,21 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "./components/ui/button";
+import { MessageCircle } from "lucide-react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,56 +24,35 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { useState } from "react";
-import { Button } from "./components/ui/button";
-import { MessageCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { AppSidebar } from "@/components/app-sidebar";
 import { FitnessRecepieCarousel } from "./components/FitnessRecepieCarousel";
 
-const trainers = [
-  {
-    id: "1",
-    name: "John Smith",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: "3",
-    name: "Michael Williams",
-    photo: "https://randomuser.me/api/portraits/men/56.jpg",
-  },
-  {
-    id: "4",
-    name: "Emma Brown",
-    photo: "https://randomuser.me/api/portraits/women/65.jpg",
-  },
-  {
-    id: "5",
-    name: "David Miller",
-    photo: "https://randomuser.me/api/portraits/men/78.jpg",
-  },
-];
+import { useAxios } from "./context/AxiosProvider"; // importa il hook
+import { Progress } from "@radix-ui/react-progress";
 
 export default function Page() {
+  const axios = useAxios(); // prendi l’istanza axios dal contesto
+  const [trainers, setTrainers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!axios) return; // aspetta che axios sia pronto
+
+    setLoading(true);
+    axios
+      .get("/api/trainers")
+      .then((res) => {
+        setTrainers(res.data.data || res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Errore nel caricamento degli allenatori:", err);
+        setError("Errore nel caricamento degli allenatori");
+        setLoading(false);
+      });
+  }, [axios]);
 
   function prev() {
     setCurrentIndex((idx) => (idx === 0 ? trainers.length - 1 : idx - 1));
@@ -64,6 +60,16 @@ export default function Page() {
   function next() {
     setCurrentIndex((idx) => (idx === trainers.length - 1 ? 0 : idx + 1));
   }
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="w-12 h-12 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+      </div>
+    );
+  if (error) return <div>{error}</div>;
+  if (trainers.length === 0) return <div>Nessun allenatore disponibile.</div>;
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -151,10 +157,12 @@ export default function Page() {
               </CardContent>
             </Card>
           </div>
+        </div>
+        <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
+          {/* Qui mantieni gli altri card come prima */}
+
           <Card className="min-h-[50vh] flex flex-row gap-4 p-4">
-            {/* Left: Carousel with side buttons */}
             <div className="relative flex items-center justify-center w-1/3">
-              {/* Left button */}
               <button
                 onClick={prev}
                 className="absolute left-0 z-10 px-3 py-2 text-2xl transition rounded-full hover:bg-gray-200"
@@ -163,15 +171,21 @@ export default function Page() {
                 ←
               </button>
 
-              {/* Trainer photo */}
               <div className="flex flex-col items-center space-y-4">
                 <img
-                  src={trainers[currentIndex].photo || "/placeholder.svg"}
-                  alt={trainers[currentIndex].name}
+                  src={
+                    trainers[currentIndex].profile_image
+                      ? `${import.meta.env.VITE_API_URL}/storage/${
+                          trainers[currentIndex].profile_image
+                        }`
+                      : "/placeholder.svg"
+                  }
+                  alt={`${trainers[currentIndex].first_name} ${trainers[currentIndex].last_name}`}
                   className="object-cover w-40 h-40 rounded-full shadow-lg"
                 />
                 <div className="font-semibold text-center">
-                  {trainers[currentIndex].name}
+                  {trainers[currentIndex].first_name}{" "}
+                  {trainers[currentIndex].last_name}
                 </div>
 
                 <Link to="/message">
@@ -182,7 +196,6 @@ export default function Page() {
                 </Link>
               </div>
 
-              {/* Right button */}
               <button
                 onClick={next}
                 className="absolute right-0 z-10 px-3 py-2 text-2xl transition rounded-full hover:bg-gray-200"
@@ -192,7 +205,6 @@ export default function Page() {
               </button>
             </div>
 
-            {/* Right: Text */}
             <div className="flex flex-col justify-center flex-1">
               <CardHeader>
                 <CardTitle>Choose your trainer</CardTitle>
@@ -206,6 +218,32 @@ export default function Page() {
                   Browse through our trainers' profiles and pick the one that
                   fits your style and preferences.
                 </p>
+                {/* Qui i dati del trainer */}
+                <div className="mt-4 space-y-2">
+                  <p>
+                    <strong>Specialty:</strong>{" "}
+                    {trainers[currentIndex].specialty || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Description:</strong>{" "}
+                    {trainers[currentIndex].bio || "No description available."}
+                  </p>
+                  <p>
+                    <strong>Experience:</strong>{" "}
+                    {trainers[currentIndex].years_experience} years
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {trainers[currentIndex].email}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong>{" "}
+                    {trainers[currentIndex].phone || "Not provided"}
+                  </p>
+                  <p>
+                    <strong>Birth Date:</strong>{" "}
+                    {trainers[currentIndex].birth_date || "Unknown"}
+                  </p>
+                </div>
               </CardContent>
             </div>
           </Card>
