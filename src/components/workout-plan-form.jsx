@@ -35,7 +35,7 @@ const MOCK_CLIENTS = [
 export function WorkoutPlanForm() {
   const [selectedClient, setSelectedClient] = useState("");
   const [exercises, setExercises] = useState([
-    { id: "1", name: "", sets: "", reps: "", rest: "", notes: "" },
+    { id: "1", name: "", sets: "", repetitions: "", load: "", notes: "" },
   ]);
 
   const addExercise = () => {
@@ -45,8 +45,8 @@ export function WorkoutPlanForm() {
         id: Date.now().toString(),
         name: "",
         sets: "",
-        reps: "",
-        rest: "",
+        repetitions: "",
+        load: "",
         notes: "",
       },
     ]);

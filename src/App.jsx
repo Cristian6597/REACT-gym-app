@@ -68,7 +68,7 @@ export default function Page() {
       </div>
     );
   if (error) return <div>{error}</div>;
-  if (trainers.length === 0) return <div>Nessun allenatore disponibile.</div>;
+  /*   if (trainers.length === 0) return <div>Nessun allenatore disponibile.</div>; */
 
   return (
     <SidebarProvider>
@@ -173,13 +173,7 @@ export default function Page() {
 
               <div className="flex flex-col items-center space-y-4">
                 <img
-                  src={
-                    trainers[currentIndex].profile_image
-                      ? `${import.meta.env.VITE_API_URL}/storage/${
-                          trainers[currentIndex].profile_image
-                        }`
-                      : "/placeholder.svg"
-                  }
+                  src={"/placeholder.svg"}
                   alt={`${trainers[currentIndex].first_name} ${trainers[currentIndex].last_name}`}
                   className="object-cover w-40 h-40 rounded-full shadow-lg"
                 />

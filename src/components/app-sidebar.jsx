@@ -174,9 +174,6 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
       <SidebarFooter className="w-full">
         <NavUser user={data.user} />
-        <Link to="/trainer">
-          <Button className="w-full">Collab with us</Button>
-        </Link>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "./ui/label";
 import { useState } from "react";
 import { useAxios } from "@/context/AxiosProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function RegisterForm({ className, ...props }) {
   const axios = useAxios();
@@ -123,10 +123,16 @@ export function RegisterForm({ className, ...props }) {
                 required
               />
             </div>
-
-            <Button type="submit" className="w-full">
-              Register
-            </Button>
+            <div className="flex flex-row gap-4">
+              <Link className="w-full" to="/register-trainer">
+                <Button type="submit" className="w-full">
+                  Are you a Trainer?
+                </Button>
+              </Link>
+              <Button type="submit" className="w-full">
+                Register
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
