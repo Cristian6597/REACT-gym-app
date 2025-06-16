@@ -14,6 +14,7 @@ import AxiosProvider from "./context/AxiosProvider.jsx";
 import UserProvider from "./context/UserProvider.jsx";
 import GuestLayout from "./layouts/GuestLayout.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout";
+import { CreateWorkoutPlanForm } from "./components/create-workout-plan-form.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -25,6 +26,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               {/* Rotte protette */}
               <Route element={<ProtectedLayout />}>
                 <Route path="/" element={<App />} />
+                <Route
+                  path="/create-workoutplan"
+                  element={<CreateWorkoutPlanForm />}
+                />
+                <Route
+                  path="/workout-plans/:id/add-exercises"
+                  element={<WorkoutPlanPage />}
+                />
+
                 <Route path="/workoutplan" element={<WorkoutPlanPage />} />
                 <Route path="/client_profile" element={<ProfilePage />} />
                 <Route path="/trainer" element={<TrainerPage />} />

@@ -85,7 +85,7 @@ const data = {
         },
         {
           title: "Create Workout",
-          url: "/workoutplan",
+          url: "/create-workoutplan",
         },
       ],
     },
