@@ -1,9 +1,9 @@
-import ChatInterface from "@/components/chat-interface"
+import TrainerRegistrationForm from "../trainer-registration-form"
 
-export default function Home() {
+export default function Page() {
   return (
-    (<main className="h-screen">
-      <ChatInterface />
-    </main>)
+    (<div>
+      <TrainerRegistrationForm />
+    </div>)
   );
 }

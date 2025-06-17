@@ -35,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                   element={<WorkoutPlanPage />}
                 />
 
+                <Route path="/register-trainer" element={<TrainerPage />} />
                 <Route path="/workoutplan" element={<WorkoutPlanPage />} />
                 <Route path="/client_profile" element={<ProfilePage />} />
                 <Route path="/trainer" element={<TrainerPage />} />
