@@ -49,12 +49,12 @@ const specialties = [
 // -----------------------------------------------------------------------------
 
 export default function TrainerRegistrationForm() {
-  const { user } = useUser(); // prendi user dal context
+  const { user, setUser } = useUser();
   const axios = useAxios();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    user_id: user?.id || "", // inizializza con user.id se esiste
+    user_id: user?.id || "",
     phone: "",
     birth_date: "",
     specialty: "",
@@ -71,6 +71,7 @@ export default function TrainerRegistrationForm() {
       }));
     }
   }, [user]);
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
@@ -140,26 +141,16 @@ export default function TrainerRegistrationForm() {
     setSubmitMessage("");
 
     try {
+      // NON includere più user_id nel form
       const response = await axios.post("/api/trainers", formData, {
         withCredentials: true,
       });
 
       setSubmitSuccess(true);
       setSubmitMessage("Registrazione trainer completata con successo!");
-
-      setFormData({
-        user_id: user?.id || "", // importantissimo non perderlo!
-        phone: "",
-        birth_date: "",
-        specialty: "",
-        bio: "",
-        certifications: "",
-        years_experience: 0,
-      });
-
       navigate("/"); // se vuoi redirect
     } catch (error) {
-      console.error("Errore durante la registrazione:", error);
+      console.error("Errore podczas la registrazione.", error);
 
       if (error.response?.data?.message) {
         setSubmitMessage("Errore: " + error.response.data.message);
@@ -365,7 +356,7 @@ export default function TrainerRegistrationForm() {
 
               {/* Pulsante di submit */}
               <div className="flex flex-row gap-4">
-                <Link to="/" className="w-full">
+                <Link to="/trainer-main" className="w-full">
                   <Button className="w-full">Indietro</Button>
                 </Link>
                 <Button

@@ -49,7 +49,7 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <userContext.Provider value={{ handleLogin, user, loading }}>
+    <userContext.Provider value={{ handleLogin, user, setUser, loading }}>
       {!loading && children}
     </userContext.Provider>
   );

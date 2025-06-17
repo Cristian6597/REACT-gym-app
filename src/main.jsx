@@ -15,6 +15,9 @@ import UserProvider from "./context/UserProvider.jsx";
 import GuestLayout from "./layouts/GuestLayout.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import { CreateWorkoutPlanForm } from "./components/create-workout-plan-form.jsx";
+import TrainerMain from "./pages/TrainerMain.jsx";
+import { ProtectedClientRoute } from "./layouts/ProtectedClientRoute.jsx";
+import { ProtectedTrainerRoute } from "./layouts/ProtectedTrainerRoute.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -23,23 +26,34 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <AxiosProvider>
           <UserProvider>
             <Routes>
-              {/* Rotte protette */}
               <Route element={<ProtectedLayout />}>
-                <Route path="/" element={<App />} />
-                <Route
-                  path="/create-workoutplan"
-                  element={<CreateWorkoutPlanForm />}
-                />
-                <Route
-                  path="/workout-plans/:id/add-exercises"
-                  element={<WorkoutPlanPage />}
-                />
-
-                <Route path="/register-trainer" element={<TrainerPage />} />
-                <Route path="/workoutplan" element={<WorkoutPlanPage />} />
-                <Route path="/client_profile" element={<ProfilePage />} />
-                <Route path="/trainer" element={<TrainerPage />} />
+                {/* Rotte condivise a entrambi */}
                 <Route path="/message" element={<MessagePage />} />
+                {/* altre rotte condivise come notifiche */}
+
+                {/* Rotte solo client */}
+                <Route element={<ProtectedClientRoute />}>
+                  <Route path="/" element={<App />} />
+                  <Route path="/client_profile" element={<ProfilePage />} />
+                  <Route path="/workoutplan" element={<WorkoutPlanPage />} />
+                  <Route path="/register-trainer" element={<TrainerPage />} />
+                  {/* altre rotte client */}
+                </Route>
+
+                {/* Rotte solo trainer */}
+                <Route element={<ProtectedTrainerRoute />}>
+                  <Route path="/trainer-main" element={<TrainerMain />} />
+                  <Route
+                    path="/create-workoutplan"
+                    element={<CreateWorkoutPlanForm />}
+                  />
+                  <Route
+                    path="/workout-plans/:id/add-exercises"
+                    element={<WorkoutPlanPage />}
+                  />
+                  <Route path="/trainer" element={<TrainerPage />} />
+                  {/* altre rotte trainer */}
+                </Route>
               </Route>
 
               {/* Rotte guest */}
