@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const axiosContext = createContext();
 
 const myaxios = axios.create({
-  baseURL: import.meta.env.RENDER_BASE_URL,
+  baseURL: import.meta.env.VITE_RENDER_BASE_URL,
   headers: {
     Accept: "application/json",
   },
