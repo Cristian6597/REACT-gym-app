@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   if (!user) return null; // non mostrare nulla se non loggato
 
@@ -122,7 +122,14 @@ export function NavUser() {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                localStorage.removeItem("api_token");
+                localStorage.removeItem("user");
+                setUser(undefined);
+                window.location.href = "/login"; // o usa navigate("/login") se preferisci react-router
+              }}
+            >
               <LogOut className="w-4 h-4 mr-2" />
               Log out
             </DropdownMenuItem>

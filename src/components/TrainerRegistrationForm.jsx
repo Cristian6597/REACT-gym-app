@@ -184,7 +184,7 @@ export default function TrainerRegistrationForm() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Phone */}
-              <div className="space-y-2">
+              <div className="space-y-2 ">
                 <Label htmlFor="phone" className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
                   Phone
@@ -196,7 +196,7 @@ export default function TrainerRegistrationForm() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="+1 123 456 7890"
-                  className="transition-all focus:ring-2 focus:ring-blue-500"
+                  className="transition-all focus:ring-2 focus:ring-blue-500 custom-shadow"
                 />
                 {errors.phone && (
                   <p className="flex items-center gap-1 text-sm text-red-600">

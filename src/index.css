@@ -74,6 +74,11 @@
   }
 }
 
+.custom-shadow:hover {
+  box-shadow: 0 0 5px #ff3f3f;
+  border: 1px solid #ff3f3f;
+}
+
 @layer base {
   * {
     @apply border-border;

@@ -92,13 +92,22 @@ export function AppSidebar({ collapsible, ...props }) {
   const filteredNavMain = data.navMain.map((section) => {
     if (section.title === "Workouts") {
       const items = section.items.filter((item) => {
+        // Mostra "Create Workout" solo ai trainer
         if (item.title === "Create Workout") {
           return user?.role === "trainer";
         }
+
+        // Mostra "My Workouts" solo se NON è trainer
+        if (item.title === "My Workouts") {
+          return user?.role !== "trainer";
+        }
+
         return true;
       });
+
       return { ...section, items };
     }
+
     return section;
   });
   return (

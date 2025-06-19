@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -228,7 +234,15 @@ export default function ClientProfile() {
               )}
             </div>
           </CardContent>
+          <CardFooter className="flex justify-end"></CardFooter>
         </Card>
+        <div className="flex justify-end">
+          <Link to="/">
+            <Button variant="outline" className="hover:bg-[#ff3f3f80]">
+              Back to Home
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
