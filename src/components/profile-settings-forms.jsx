@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAxios } from "@/context/AxiosProvider";
 
@@ -39,6 +39,7 @@ const trainingPreferences = [
 ];
 
 export function ProfileSettingsForm() {
+  const navigate = useNavigate();
   const [date, setDate] = useState();
   const [gender, setGender] = useState("male");
   const [height, setHeight] = useState("");
@@ -81,6 +82,7 @@ export function ProfileSettingsForm() {
         description: "Your profile was successfully created!",
       });
       handleReset();
+      navigate("/client_profile");
     } catch (error) {
       console.log("Submitting gender:", gender);
       console.log("Mapped gender:", genderMap[gender]);

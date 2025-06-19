@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   User,
   Mail,
   Calendar,
-  Users,
-  Ruler,
-  Target,
-  Dumbbell,
+  Phone,
+  Award,
+  FileText,
+  Star,
   Edit3,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -18,7 +17,7 @@ import { useState, useEffect } from "react";
 import { useAxios } from "@/context/AxiosProvider";
 import { useUser } from "@/context/UserProvider";
 
-export default function ClientProfile() {
+export default function TrainerProfileSettings() {
   const axios = useAxios();
   const { user } = useUser();
   const [profile, setProfile] = useState(null);
@@ -34,9 +33,9 @@ export default function ClientProfile() {
       }
 
       try {
-        const { data } = await axios.get(`/api/client-profiles/${user.id}`);
+        // Cambiato endpoint per trainer profiles
+        const { data } = await axios.get(`/api/trainers/${user.id}`);
 
-        // data has the shape { profile: {...}, user: {...} }
         setProfile({
           ...data.profile,
           user: data.user,
@@ -78,7 +77,7 @@ export default function ClientProfile() {
         </h1>
         <p className="mt-2 text-red-500">Profile not found.</p>
         <Link
-          to="/edit_client_profile"
+          to="/edit_trainer_profile"
           className="inline-block mt-4 text-blue-500 underline"
         >
           Create your profile
@@ -87,26 +86,19 @@ export default function ClientProfile() {
     );
   }
 
-  // Extract data from profile and user
   const {
+    phone,
     birth_date,
-    gender,
-    height_cm,
-    fitness_goals,
-    training_preferences,
-    avatar_url,
+    specialty,
+    bio,
+    certifications,
+    years_experience,
     user: { first_name, last_name, email } = {},
   } = profile;
 
-  // Format data
-  const goalsArray = fitness_goals ? fitness_goals.split(",") : [];
-  const prefsArray = training_preferences
-    ? training_preferences.split(",")
-    : [];
   const formattedBirthDate = birth_date
     ? new Date(birth_date).toLocaleDateString()
     : "-";
-  const formattedHeight = height_cm ? `${height_cm} cm` : "-";
 
   return (
     <div className="min-h-screen p-4">
@@ -117,7 +109,7 @@ export default function ClientProfile() {
             <div className="flex flex-col items-center gap-6 sm:flex-row">
               <Avatar className="w-24 h-24">
                 <AvatarImage
-                  src={avatar_url || "../assets/placeholder1.jpg"}
+                  src={profile.avatar_url || "../assets/placeholder1.jpg"}
                   alt="Profile"
                 />
                 <AvatarFallback className="text-xl font-semibold bg-blue-100">
@@ -129,9 +121,9 @@ export default function ClientProfile() {
                 <h1 className="text-3xl font-bold">
                   {first_name} {last_name}
                 </h1>
-                <p className="mt-1 text-gray-300">Active member</p>
+                <p className="mt-1 text-gray-300">Trainer Profile</p>
                 <div className="flex justify-center mt-4 sm:justify-start">
-                  <Link to="/edit_client_profile">
+                  <Link to="/edit_trainer_profile">
                     <Button className="gap-2">
                       <Edit3 className="w-4 h-4" />
                       Edit Profile
@@ -155,80 +147,50 @@ export default function ClientProfile() {
             <CardContent className="space-y-4">
               <InfoRow icon={<Mail />} label="Email" value={email} />
               <Separator />
+              <InfoRow icon={<Phone />} label="Phone" value={phone} />
+              <Separator />
               <InfoRow
                 icon={<Calendar />}
                 label="Birth Date"
                 value={formattedBirthDate}
               />
               <Separator />
-              <InfoRow icon={<Users />} label="Gender" value={gender} />
+              <InfoRow icon={<Award />} label="Specialty" value={specialty} />
               <Separator />
               <InfoRow
-                icon={<Ruler />}
-                label="Height"
-                value={formattedHeight}
+                icon={<Star />}
+                label="Experience (years)"
+                value={years_experience}
               />
             </CardContent>
           </Card>
 
-          {/* Fitness Goals */}
+          {/* Certifications & Bio */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-green-600" />
-                Fitness Goals
+                <FileText className="w-5 h-5 text-green-600" />
+                Certifications & Bio
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="mb-2 text-sm text-gray-500">Your goals</p>
-              <div className="flex flex-wrap gap-2">
-                {goalsArray.length > 0 ? (
-                  goalsArray.map((goal, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="text-green-800 bg-green-100 dark:bg-green-200 dark:text-green-900"
-                    >
-                      {goal.trim()}
-                    </Badge>
-                  ))
-                ) : (
-                  <p className="text-gray-400">No goals set</p>
-                )}
+              <div className="mb-4">
+                <h3 className="text-sm font-semibold text-gray-600">
+                  Certifications
+                </h3>
+                <p className="text-gray-700">
+                  {certifications || "No certifications provided"}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-600">Bio</h3>
+                <p className="text-gray-700 whitespace-pre-line">
+                  {bio || "No bio provided"}
+                </p>
               </div>
             </CardContent>
           </Card>
         </div>
-
-        {/* Training Preferences */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Dumbbell className="w-5 h-5 text-orange-600" />
-              Training Preferences
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-3 text-sm text-gray-500">
-              Preferred types of training
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {prefsArray.length > 0 ? (
-                prefsArray.map((pref, index) => (
-                  <Badge
-                    key={index}
-                    variant="outline"
-                    className="text-orange-700 border-orange-200"
-                  >
-                    {pref.trim()}
-                  </Badge>
-                ))
-              ) : (
-                <p className="text-gray-400">No preferences set</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

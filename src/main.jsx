@@ -22,6 +22,8 @@ import ClientProfile from "./components/profile-page-client.jsx";
 import { ProfileSettingsForm } from "./components/profile-settings-forms.jsx";
 import MyWorkouts from "./components/my-workouts.jsx";
 import MyWorkoutsPage from "./pages/MyWorkoutsPage.jsx";
+import TrainerProfile from "./components/trainer-profile.jsx";
+import TrainerProfileSettings from "./components/profile-page-trainer.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -61,6 +63,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                     element={<WorkoutPlanPage />}
                   />
                   <Route path="/trainer" element={<TrainerPage />} />
+                  <Route
+                    path="/trainer_profile"
+                    element={<TrainerProfileSettings />}
+                  />
                   {/* altre rotte trainer */}
                 </Route>
               </Route>

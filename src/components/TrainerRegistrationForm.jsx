@@ -166,7 +166,7 @@ export default function TrainerRegistrationForm() {
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="max-w-2xl mx-auto">
         <Card className="shadow-xl">
           <CardHeader className="space-y-1 text-center">
@@ -174,20 +174,20 @@ export default function TrainerRegistrationForm() {
               <User className="w-6 h-6 text-blue-600" />
             </div>
             <CardTitle className="text-2xl font-semibold">
-              Registrazione Trainer
+              Trainer Registration
             </CardTitle>
             <CardDescription>
-              Completa il tuo profilo per diventare un trainer certificato
+              Complete your profile to become a certified trainer
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Telefono */}
+              {/* Phone */}
               <div className="space-y-2">
                 <Label htmlFor="phone" className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  Telefono
+                  Phone
                 </Label>
                 <Input
                   id="phone"
@@ -195,7 +195,7 @@ export default function TrainerRegistrationForm() {
                   type="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="+39 123 456 7890"
+                  placeholder="+1 123 456 7890"
                   className="transition-all focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.phone && (
@@ -206,11 +206,11 @@ export default function TrainerRegistrationForm() {
                 )}
               </div>
 
-              {/* Data di nascita */}
+              {/* Birth date */}
               <div className="space-y-2">
                 <Label htmlFor="birth_date" className="flex items-center gap-2">
                   <CalendarDays className="w-4 h-4" />
-                  Data di nascita
+                  Birth Date
                 </Label>
                 <Input
                   id="birth_date"
@@ -228,18 +228,18 @@ export default function TrainerRegistrationForm() {
                 )}
               </div>
 
-              {/* Specialità */}
+              {/* Specialty */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2">
                   <Award className="w-4 h-4" />
-                  Specialità
+                  Specialty
                 </Label>
                 <Select
                   value={formData.specialty}
                   onValueChange={handleSelectChange}
                 >
                   <SelectTrigger className="transition-all focus:ring-2 focus:ring-blue-500">
-                    <SelectValue placeholder="Seleziona la tua specialità" />
+                    <SelectValue placeholder="Select your specialty" />
                   </SelectTrigger>
                   <SelectContent>
                     {specialties.map((item) => (
@@ -257,14 +257,14 @@ export default function TrainerRegistrationForm() {
                 )}
               </div>
 
-              {/* Anni di esperienza */}
+              {/* Years of experience */}
               <div className="space-y-2">
                 <Label
                   htmlFor="years_experience"
                   className="flex items-center gap-2"
                 >
                   <Clock className="w-4 h-4" />
-                  Anni di esperienza
+                  Years of Experience
                 </Label>
                 <Input
                   id="years_experience"
@@ -284,25 +284,25 @@ export default function TrainerRegistrationForm() {
                 )}
               </div>
 
-              {/* Certificazioni */}
+              {/* Certifications */}
               <div className="space-y-2">
                 <Label
                   htmlFor="certifications"
                   className="flex items-center gap-2"
                 >
                   <BookOpen className="w-4 h-4" />
-                  Certificazioni
+                  Certifications
                 </Label>
                 <Input
                   id="certifications"
                   name="certifications"
                   value={formData.certifications}
                   onChange={handleInputChange}
-                  placeholder="es: NASM-CPT, ACSM, Yoga Alliance RYT-200"
+                  placeholder="e.g., NASM-CPT, ACSM, Yoga Alliance RYT-200"
                   className="transition-all focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="text-sm text-muted-foreground">
-                  Elenca le tue certificazioni separate da virgole
+                  List your certifications separated by commas
                 </p>
                 {errors.certifications && (
                   <p className="flex items-center gap-1 text-sm text-red-600">
@@ -314,18 +314,18 @@ export default function TrainerRegistrationForm() {
 
               {/* Bio */}
               <div className="space-y-2">
-                <Label htmlFor="bio">Biografia</Label>
+                <Label htmlFor="bio">Biography</Label>
                 <Textarea
                   id="bio"
                   name="bio"
                   value={formData.bio}
                   onChange={handleInputChange}
-                  placeholder="Racconta qualcosa di te, della tua esperienza e del tuo approccio all'allenamento..."
+                  placeholder="Tell us about yourself, your experience, and your training approach..."
                   rows={4}
                   className="transition-all resize-none focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="text-sm text-muted-foreground">
-                  Descrivi la tua esperienza e filosofia di allenamento
+                  Describe your experience and training philosophy
                 </p>
                 {errors.bio && (
                   <p className="flex items-center gap-1 text-sm text-red-600">
@@ -335,7 +335,7 @@ export default function TrainerRegistrationForm() {
                 )}
               </div>
 
-              {/* Messaggio di stato */}
+              {/* Status message */}
               {submitMessage && (
                 <div
                   className={`rounded-lg p-4 flex items-center gap-2 ${
@@ -349,15 +349,14 @@ export default function TrainerRegistrationForm() {
                   ) : (
                     <AlertCircle className="w-5 h-5" />
                   )}
-
                   {submitMessage}
                 </div>
               )}
 
-              {/* Pulsante di submit */}
+              {/* Buttons */}
               <div className="flex flex-row gap-4">
                 <Link to="/trainer-main" className="w-full">
-                  <Button className="w-full">Indietro</Button>
+                  <Button className="w-full">Back</Button>
                 </Link>
                 <Button
                   type="submit"
@@ -367,10 +366,10 @@ export default function TrainerRegistrationForm() {
                   {isSubmitting ? (
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 mr-2 border-2 border-gray-300 rounded-full animate-spin border-t-transparent" />
-                      Registrazione in corso...
+                      Registering...
                     </div>
                   ) : (
-                    "Completa Registrazione"
+                    "Complete Registration"
                   )}
                 </Button>
               </div>

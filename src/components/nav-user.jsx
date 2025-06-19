@@ -102,7 +102,13 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <Link to="/client_profile">
+              <Link
+                to={
+                  user.role === "client"
+                    ? "/client_profile"
+                    : "/trainer_profile"
+                }
+              >
                 <DropdownMenuItem>
                   <User className="w-4 h-4 mr-2" />
                   Profile

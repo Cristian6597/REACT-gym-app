@@ -16,7 +16,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Dumbbell, Target, Clock, ArrowLeft } from "lucide-react";
+import {
+  Calendar,
+  Dumbbell,
+  Target,
+  Clock,
+  ArrowLeft,
+  CheckCircle,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -218,11 +225,20 @@ const workoutExercises = {
 export default function WorkoutViewer() {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [completedExercises, setCompletedExercises] = useState({});
   const { theme, setTheme } = useTheme();
 
   const handleWorkoutClick = (workout) => {
     setSelectedWorkout(workout);
+    setCompletedExercises({}); // Reset completamento
     setIsDialogOpen(true);
+  };
+
+  const handleExerciseComplete = (exerciseId) => {
+    setCompletedExercises((prev) => ({
+      ...prev,
+      [exerciseId]: !prev[exerciseId],
+    }));
   };
 
   const formatDate = (dateString) => {
@@ -237,10 +253,18 @@ export default function WorkoutViewer() {
     ? workoutExercises[selectedWorkout.id] || []
     : [];
 
+  const completedCount = selectedExercises.filter(
+    (ex) => completedExercises[ex.id]
+  ).length;
+  const completionPercentage = Math.round(
+    (completedCount / selectedExercises.length) * 100
+  );
+
   return (
     <>
       <div className="min-h-screen p-6 bg-gray-50 dark:bg-[#18191b]">
         <div className="mx-auto max-w-7xl">
+          {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -251,7 +275,6 @@ export default function WorkoutViewer() {
                   className="hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   <ArrowLeft className="w-5 h-5" />
-                  <span className="sr-only">Torna alla home</span>
                 </Button>
                 <div>
                   <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">
@@ -275,6 +298,7 @@ export default function WorkoutViewer() {
             </div>
           </div>
 
+          {/* Workout Cards */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {workoutPlans.map((workout) => (
               <Card
@@ -313,6 +337,7 @@ export default function WorkoutViewer() {
             ))}
           </div>
 
+          {/* Dialog */}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-gray-50 dark:bg-[#18191b]">
               <DialogHeader>
@@ -324,6 +349,7 @@ export default function WorkoutViewer() {
 
               {selectedWorkout && (
                 <div className="space-y-6">
+                  {/* Descrizione */}
                   <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#18191b]">
                     <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">
                       Descrizione
@@ -358,17 +384,54 @@ export default function WorkoutViewer() {
                     </div>
                   </div>
 
+                  {/* Esercizi */}
                   <div>
-                    <h3 className="flex items-center gap-2 mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
-                      <Dumbbell className="w-5 h-5 text-[#ff3f3f80]" />
-                      Esercizi ({selectedExercises.length})
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        <Dumbbell className="w-5 h-5 text-[#ff3f3f80]" />
+                        Esercizi ({selectedExercises.length})
+                      </h3>
+
+                      <div className="relative w-10 h-10">
+                        <svg
+                          className="transform -rotate-90"
+                          viewBox="0 0 36 36"
+                        >
+                          <path
+                            className="text-gray-300"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                          <path
+                            className="text-[#FF3F3F]"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            strokeDasharray={`${completionPercentage}, 100`}
+                            fill="none"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-800 dark:text-gray-100">
+                          {completionPercentage}%
+                        </div>
+                      </div>
+                    </div>
 
                     <div className="space-y-4">
                       {selectedExercises.map((exercise, index) => (
                         <div
                           key={exercise.id}
-                          className="p-4 bg-white border rounded-lg dark:border-[#ff3f3f80] dark:bg-[#18191b]"
+                          className={`p-4 border rounded-lg ${
+                            completedExercises[exercise.id]
+                              ? "bg-green-50 border-green-500 dark:bg-green-900/20"
+                              : "bg-white dark:bg-[#18191b] dark:border-[#ff3f3f80]"
+                          }`}
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center gap-2">
@@ -379,6 +442,27 @@ export default function WorkoutViewer() {
                                 {exercise.name}
                               </h4>
                             </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                handleExerciseComplete(exercise.id)
+                              }
+                              className={`text-xs ${
+                                completedExercises[exercise.id]
+                                  ? "bg-green-600 text-white hover:bg-green-700"
+                                  : ""
+                              }`}
+                            >
+                              {completedExercises[exercise.id] ? (
+                                <>
+                                  <CheckCircle className="w-4 h-4 mr-1" />
+                                  Fatto
+                                </>
+                              ) : (
+                                "Fatto"
+                              )}
+                            </Button>
                           </div>
 
                           <div className="grid grid-cols-1 gap-4 mb-3 md:grid-cols-3">
@@ -390,7 +474,6 @@ export default function WorkoutViewer() {
                                 <Badge variant="outline">{exercise.sets}</Badge>
                               </div>
                             )}
-
                             {exercise.repetitions && (
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -401,7 +484,6 @@ export default function WorkoutViewer() {
                                 </Badge>
                               </div>
                             )}
-
                             {exercise.load && (
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
