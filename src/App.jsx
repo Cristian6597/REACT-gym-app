@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./components/ui/button";
 import { MessageCircle } from "lucide-react";
+import placeholder from "@/assets/placeholder1.jpg";
 
 import {
   Card,
@@ -27,18 +28,18 @@ import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { FitnessRecepieCarousel } from "./components/FitnessRecepieCarousel";
 
-import { useAxios } from "./context/AxiosProvider"; // importa il hook
+import { useAxios } from "./context/AxiosProvider";
 import { Progress } from "@radix-ui/react-progress";
 
 export default function Page() {
-  const axios = useAxios(); // prendi l’istanza axios dal contesto
+  const axios = useAxios();
   const [trainers, setTrainers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!axios) return; // aspetta che axios sia pronto
+    if (!axios) return;
 
     setLoading(true);
     axios
@@ -68,13 +69,12 @@ export default function Page() {
       </div>
     );
   if (error) return <div>{error}</div>;
-  /*   if (trainers.length === 0) return <div>Nessun allenatore disponibile.</div>; */
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 dark:text-[#FF3F3F] bg-background w-full bg-[#18191b]">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="h-4 mr-2" />
@@ -93,149 +93,112 @@ export default function Page() {
         </header>
         <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
           <div className="grid gap-4 auto-rows-min md:grid-cols-3">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Today Workout</CardTitle>
-                <CardDescription>Chest & Triceps</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <span>Bench Press</span>
-                    <span>3 sets × 10 reps</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Incline Dumbbell Press</span>
-                    <span>3 sets × 12 reps</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Tricep Pushdowns</span>
-                    <span>3 sets × 15 reps</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Weekly Progress</CardTitle>
-                <CardDescription>May 13 - May 19</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <span>Workouts Completed</span>
-                    <span>3/5</span>
-                  </div>
-                  <Progress value={60} className="h-2" />
-                  <div className="flex justify-between">
-                    <span>Weekly Goal</span>
-                    <span>60%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Personal Records</CardTitle>
-                <CardDescription>Latest achievements</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <span>Bench Press</span>
-                    <span>225 lbs</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Squat</span>
-                    <span>315 lbs</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Deadlift</span>
-                    <span>405 lbs</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Le tue card esistenti qui */}
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
-          {/* Qui mantieni gli altri card come prima */}
-
-          <Card className="min-h-[50vh] flex flex-row gap-4 p-4">
-            <div className="relative flex items-center justify-center w-1/3">
+          <Card className="min-h-[50vh] flex flex-col md:flex-row items-center gap-4 p-4 dark:bg-[#18171B]">
+            {/* Immagine e pulsanti */}
+            <div className="relative flex flex-col items-center justify-center w-full md:w-1/3">
+              {/* Pulsanti freccia desktop - ai lati */}
               <button
                 onClick={prev}
-                className="absolute left-0 z-10 px-3 py-2 text-2xl transition rounded-full hover:bg-gray-200"
+                className="hidden md:flex absolute left-[-2rem] top-1/2 transform -translate-y-1/2 px-12 py-2 text-2xl rounded-full hover:bg-gray-200 transition"
                 aria-label="Previous trainer"
               >
                 ←
               </button>
 
-              <div className="flex flex-col items-center space-y-4">
-                <img
-                  src={"/placeholder.svg"}
-                  alt={`${trainers[currentIndex].first_name} ${trainers[currentIndex].last_name}`}
-                  className="object-cover w-40 h-40 rounded-full shadow-lg"
-                />
-                <div className="font-semibold text-center">
-                  {trainers[currentIndex].first_name}{" "}
-                  {trainers[currentIndex].last_name}
-                </div>
+              <img
+                src={placeholder}
+                alt={`${trainers[currentIndex]?.first_name} ${trainers[currentIndex]?.last_name}`}
+                className="object-cover w-32 h-32 rounded-full shadow-lg md:w-40 md:h-40"
+              />
 
-                <Link to="/message">
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4" />
-                    Chat with trainer
-                  </Button>
-                </Link>
+              <div className="mt-4 font-semibold text-center">
+                {trainers[currentIndex]?.first_name}{" "}
+                {trainers[currentIndex]?.last_name}
               </div>
 
+              <Link to="/message" className="w-full mt-2 md:w-auto">
+                <Button
+                  variant="outline"
+                  className="flex items-center justify-center w-full gap-2 hover:text-[#FF3F3F] hover:border-[#FF3F3F] transition-colors bg-transparent shadow-none"
+                >
+                  <MessageCircle className="w-4 h-4 text-gray-500 hover:text-[#FF3F3F]" />
+                  <span className="hidden sm:inline">Chat with trainer</span>
+                  <span className="sm:hidden">Chat</span>
+                </Button>
+              </Link>
+
+              {/* Pulsanti freccia mobile - sotto immagine */}
+              <div className="flex gap-4 mt-4 md:hidden">
+                <button
+                  onClick={prev}
+                  className="px-4 py-2 text-xl transition rounded-full hover:bg-gray-200"
+                  aria-label="Previous trainer"
+                >
+                  ←
+                </button>
+                <button
+                  onClick={next}
+                  className="px-4 py-2 text-xl transition rounded-full hover:bg-gray-200"
+                  aria-label="Next trainer"
+                >
+                  →
+                </button>
+              </div>
+
+              {/* Pulsante freccia desktop destra */}
               <button
                 onClick={next}
-                className="absolute right-0 z-10 px-3 py-2 text-2xl transition rounded-full hover:bg-gray-200"
+                className="hidden md:flex absolute right-[-2rem] top-1/2 transform -translate-y-1/2 px-12 py-2 text-2xl rounded-full hover:bg-gray-200 transition"
                 aria-label="Next trainer"
               >
                 →
               </button>
             </div>
 
-            <div className="flex flex-col justify-center flex-1">
+            {/* Info del trainer */}
+            <div className="flex flex-col justify-center flex-1 w-full">
               <CardHeader>
-                <CardTitle>Choose your trainer</CardTitle>
+                <CardTitle>
+                  {trainers[currentIndex]?.user?.first_name}{" "}
+                  {trainers[currentIndex]?.user?.last_name}
+                </CardTitle>
                 <CardDescription>
                   Select from our list of professional trainers to help you
                   reach your fitness goals.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="mb-4 text-muted-foreground">
                   Browse through our trainers' profiles and pick the one that
                   fits your style and preferences.
                 </p>
-                {/* Qui i dati del trainer */}
-                <div className="mt-4 space-y-2">
+                <div className="space-y-2 text-sm">
                   <p>
                     <strong>Specialty:</strong>{" "}
-                    {trainers[currentIndex].specialty || "N/A"}
+                    {trainers[currentIndex]?.specialty || "N/A"}
                   </p>
                   <p>
                     <strong>Description:</strong>{" "}
-                    {trainers[currentIndex].bio || "No description available."}
+                    {trainers[currentIndex]?.bio || "No description available."}
                   </p>
                   <p>
                     <strong>Experience:</strong>{" "}
-                    {trainers[currentIndex].years_experience} years
+                    {trainers[currentIndex]?.years_experience} years
                   </p>
                   <p>
-                    <strong>Email:</strong> {trainers[currentIndex].email}
+                    <strong>Email:</strong> {trainers[currentIndex]?.email}
                   </p>
                   <p>
                     <strong>Phone:</strong>{" "}
-                    {trainers[currentIndex].phone || "Not provided"}
+                    {trainers[currentIndex]?.phone || "Not provided"}
                   </p>
                   <p>
                     <strong>Birth Date:</strong>{" "}
-                    {trainers[currentIndex].birth_date || "Unknown"}
+                    {trainers[currentIndex]?.birth_date || "Unknown"}
                   </p>
                 </div>
               </CardContent>

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -23,27 +22,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAxios } from "@/context/AxiosProvider";
 
-// Mock data for trainers
-const trainers = [
-  { id: "1", name: "John Smith" },
-  { id: "2", name: "Sarah Johnson" },
-  { id: "3", name: "Michael Williams" },
-  { id: "4", name: "Emma Brown" },
-  { id: "5", name: "David Miller" },
-];
-
-// Training preferences options
 const trainingPreferences = [
   { id: "cardio", label: "Cardio" },
   { id: "hiit", label: "HIIT" },
@@ -58,11 +41,12 @@ const trainingPreferences = [
 export function ProfileSettingsForm() {
   const [date, setDate] = useState();
   const [gender, setGender] = useState("male");
-  const [trainerId, setTrainerId] = useState("");
   const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
   const [fitnessGoals, setFitnessGoals] = useState("");
   const [preferences, setPreferences] = useState([]);
   const { toast } = useToast();
+  const axios = useAxios();
 
   function handlePreferenceChange(id, checked) {
     if (checked) {
@@ -72,27 +56,50 @@ export function ProfileSettingsForm() {
     }
   }
 
-  function handleSubmit(e) {
+  const genderMap = {
+    male: "M",
+    female: "F",
+    other: "Other",
+  };
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const formData = {
-      trainerId,
       birth_date: date ? format(date, "yyyy-MM-dd") : null,
-      gender,
-      height_cm: height,
+      gender: genderMap[gender] ?? null,
+      height_cm: parseInt(height),
+      weight_kg: weight ? parseFloat(weight) : null,
       fitness_goals: fitnessGoals,
-      training_preferences: preferences,
+      training_preferences: preferences.join(","),
     };
 
-    console.log(formData);
-    return true; // Make sure this actually returns true
+    try {
+      await axios.post("/api/client-profiles", formData);
+      toast({
+        title: "Profile Saved",
+        description: "Your profile was successfully created!",
+      });
+      handleReset();
+    } catch (error) {
+      console.log("Submitting gender:", gender);
+      console.log("Mapped gender:", genderMap[gender]);
+
+      console.error("Error creating profile:", error);
+      console.log("Response data:", error?.response?.data);
+      toast({
+        title: "Error",
+        description: "There was a problem saving your profile.",
+        variant: "destructive",
+      });
+    }
   }
 
   function handleReset() {
     setDate(undefined);
     setGender("male");
-    setTrainerId("");
     setHeight("");
+    setWeight("");
     setFitnessGoals("");
     setPreferences([]);
   }
@@ -104,33 +111,13 @@ export function ProfileSettingsForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Trainer Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="trainer">Trainer</Label>
-            <Select value={trainerId} onValueChange={setTrainerId}>
-              <SelectTrigger id="trainer">
-                <SelectValue placeholder="Select a trainer" />
-              </SelectTrigger>
-              <SelectContent>
-                {trainers.map((trainer) => (
-                  <SelectItem key={trainer.id} value={trainer.id}>
-                    {trainer.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground">
-              Select your preferred personal trainer.
-            </p>
-          </div>
-
           {/* Birth Date */}
           <div className="space-y-2">
             <Label>Birth Date</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant={"outline"}
+                  variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground"
@@ -146,13 +133,10 @@ export function ProfileSettingsForm() {
                   selected={date}
                   onSelect={setDate}
                   initialFocus
-                  disabled={(date) => date > new Date()}
+                  disabled={(d) => d > new Date()}
                 />
               </PopoverContent>
             </Popover>
-            <p className="text-sm text-muted-foreground">
-              Your date of birth helps us customize your fitness plan.
-            </p>
           </div>
 
           {/* Gender */}
@@ -165,21 +149,15 @@ export function ProfileSettingsForm() {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="male" id="male" />
-                <Label htmlFor="male" className="font-normal">
-                  Male
-                </Label>
+                <Label htmlFor="male">Male</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="female" id="female" />
-                <Label htmlFor="female" className="font-normal">
-                  Female
-                </Label>
+                <Label htmlFor="female">Female</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="other" id="other" />
-                <Label htmlFor="other" className="font-normal">
-                  Other
-                </Label>
+                <Label htmlFor="other">Other</Label>
               </div>
             </RadioGroup>
           </div>
@@ -190,13 +168,22 @@ export function ProfileSettingsForm() {
             <Input
               id="height"
               type="number"
-              placeholder="Enter your height in centimeters"
+              placeholder="Enter your height"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
             />
-            <p className="text-sm text-muted-foreground">
-              Your height helps us calculate your fitness metrics.
-            </p>
+          </div>
+
+          {/* Weight */}
+          <div className="space-y-2">
+            <Label htmlFor="weight">Weight (kg)</Label>
+            <Input
+              id="weight"
+              type="number"
+              placeholder="Enter your weight"
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+            />
           </div>
 
           {/* Fitness Goals */}
@@ -204,14 +191,11 @@ export function ProfileSettingsForm() {
             <Label htmlFor="goals">Fitness Goals</Label>
             <Textarea
               id="goals"
-              placeholder="Describe your fitness goals and what you want to achieve"
+              placeholder="Describe your fitness goals"
               className="min-h-[100px]"
               value={fitnessGoals}
               onChange={(e) => setFitnessGoals(e.target.value)}
             />
-            <p className="text-sm text-muted-foreground">
-              Tell us what you want to achieve with your fitness journey.
-            </p>
           </div>
 
           {/* Training Preferences */}
@@ -227,26 +211,20 @@ export function ProfileSettingsForm() {
                       handlePreferenceChange(item.id, checked)
                     }
                   />
-                  <Label htmlFor={item.id} className="font-normal">
-                    {item.label}
-                  </Label>
+                  <Label htmlFor={item.id}>{item.label}</Label>
                 </div>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground">
-              Select the types of training you prefer or are interested in.
-            </p>
           </div>
+
+          <CardFooter className="flex justify-between pt-6">
+            <Link to="/">
+              <Button variant="outline">Back</Button>
+            </Link>
+            <Button type="submit">Save Profile</Button>
+          </CardFooter>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Link to="/">
-          <Button variant="outline">Back</Button>
-        </Link>
-        <Link to="/">
-          <Button type="submit">Save Profile</Button>
-        </Link>
-      </CardFooter>
     </Card>
   );
 }

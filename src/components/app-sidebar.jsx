@@ -1,20 +1,5 @@
-import {
-  Activity,
-  Calendar,
-  Dumbbell,
-  FlameIcon,
-  LineChart,
-  ListChecks,
-  Settings2,
-  Timer,
-  Trophy,
-  Bell,
-} from "lucide-react";
-
-import { NavMain } from "./nav-main";
-import { NavExercises } from "./nav-exercises";
-import { NavUser } from "./nav-user";
-import { PlanSwitcher } from "./plan-switcher";
+import { useUser } from "@/context/UserProvider";
+import { Activity, Bell, Dumbbell, FlameIcon, Timer } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -22,8 +7,12 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import { NavExercises } from "./nav-exercises";
+import { NavMain } from "./nav-main";
+import { NavUser } from "./nav-user";
+import { PlanSwitcher } from "./plan-switcher";
+import { Button } from "./ui/button";
 
 // This is sample data for a gym app
 const data = {
@@ -64,14 +53,6 @@ const data = {
           title: "Overview",
           url: "/",
         },
-        {
-          title: "Weekly Stats",
-          url: "#",
-        },
-        {
-          title: "Goals",
-          url: "#",
-        },
       ],
     },
     {
@@ -81,7 +62,7 @@ const data = {
       items: [
         {
           title: "My Workouts",
-          url: "#",
+          url: "/my-workouts",
         },
         {
           title: "Create Workout",
@@ -89,44 +70,6 @@ const data = {
         },
       ],
     },
-    /* {
-      title: "Progress",
-      url: "#",
-      icon: LineChart,
-      items: [
-        {
-          title: "Body Metrics",
-          url: "#",
-        },
-        {
-          title: "Strength Gains",
-          url: "#",
-        },
-        {
-          title: "Personal Records",
-          url: "#",
-        },
-        {
-          title: "Progress Photos",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-      items: [
-        {
-          title: "Schedule",
-          url: "#",
-        },
-        {
-          title: "Upcoming Workouts",
-          url: "#",
-        },
-      ],
-    }, */
     {
       title: "Notifications",
       url: "/notifications",
@@ -143,40 +86,48 @@ const data = {
       ],
     },
   ],
-  exercises: [
-    /* {
-      name: "Chest & Triceps",
-      url: "#",
-      icon: Dumbbell,
-    },
-    {
-      name: "Back & Biceps",
-      url: "#",
-      icon: ListChecks,
-    },
-    {
-      name: "Legs & Core",
-      url: "#",
-      icon: Trophy,
-    }, */
-  ],
 };
-
-export function AppSidebar({ ...props }) {
+export function AppSidebar({ collapsible, ...props }) {
+  const { user } = useUser();
+  const filteredNavMain = data.navMain.map((section) => {
+    if (section.title === "Workouts") {
+      const items = section.items.filter((item) => {
+        if (item.title === "Create Workout") {
+          return user?.role === "trainer";
+        }
+        return true;
+      });
+      return { ...section, items };
+    }
+    return section;
+  });
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} data-collapsible className="">
       <SidebarHeader>
-        <PlanSwitcher plans={data.plans} />
+        <div className="flex items-center justify-center w-full gap-2 p-2 border dark:border-[#FF3F3F] border-solid rounded-xl">
+          <Dumbbell className="w-5 h-5 dark:text-[#FF3F3F]" />
+          <h1 className="text-sm font-semibold whitespace-nowrap group-data-[collapsible=icon]:hidden">
+            FitnessPro
+          </h1>
+        </div>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavExercises exercises={data.exercises} />
+
+      <SidebarContent className="">
+        <NavMain items={filteredNavMain} />
       </SidebarContent>
+
       <SidebarFooter className="w-full">
-        <NavUser user={data.user} />
-        <Link to="/register-trainer" className="w-full">
-          <Button className="w-full">Join the Crew</Button>
-        </Link>
+        <NavUser
+          user={data.user}
+          className="group-data-[collapsible=icon]:[&_span]:hidden"
+        />
+        {user?.role === "client" && (
+          <div className="group-data-[collapsible=icon]:hidden">
+            <Link to="/register-trainer" className="w-full">
+              <Button className="w-full">Join the Crew</Button>
+            </Link>
+          </div>
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

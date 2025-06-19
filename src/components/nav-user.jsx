@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  FlameIcon,
-  LogOut,
-  Medal,
-  Moon,
-  Sun,
-  User,
-} from "lucide-react";
+import { Bell, ChevronsUpDown, LogOut, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useUser } from "@/context/UserProvider"; // ← importa useUser
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -32,9 +23,12 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 
-export function NavUser({ user }) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const { user } = useUser();
+
+  if (!user) return null; // non mostrare nulla se non loggato
 
   return (
     <SidebarMenu>
@@ -60,12 +54,17 @@ export function NavUser({ user }) {
               <Avatar className="w-8 h-8 rounded-lg">
                 <AvatarImage
                   src={user.avatar || "/placeholder.svg"}
-                  alt={user.name}
+                  alt={`${user.first_name} ${user.last_name}`}
                 />
-                <AvatarFallback className="rounded-lg">JD</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {user.first_name?.[0] ?? "U"}
+                  {user.last_name?.[0] ?? ""}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-sm leading-tight text-left">
-                <span className="font-semibold truncate">{user.name}</span>
+                <span className="font-semibold truncate">
+                  {user.first_name} {user.last_name}
+                </span>
                 <span className="text-xs truncate">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -82,28 +81,26 @@ export function NavUser({ user }) {
                 <Avatar className="w-8 h-8 rounded-lg">
                   <AvatarImage
                     src={user.avatar || "/placeholder.svg"}
-                    alt={user.name}
+                    alt={`${user.first_name} ${user.last_name}`}
                   />
-                  <AvatarFallback className="rounded-lg">JD</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {user.first_name?.[0] ?? "U"}
+                    {user.last_name?.[0] ?? ""}
+                  </AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-sm leading-tight text-left">
-                  <span className="font-semibold truncate">{user.name}</span>
-                  <span className="text-xs truncate">{user.email}</span>
+                <div className="flex flex-col text-sm leading-tight text-left">
+                  <span className="font-semibold">
+                    {user.first_name} {user.last_name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
-            {/*  <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Medal className="w-4 h-4 mr-2" />
-                <span>Workouts: {user.stats.workouts}</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <FlameIcon className="w-4 h-4 mr-2" />
-                <span>Streak: {user.stats.streak} days</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator /> */}
+
             <DropdownMenuGroup>
               <Link to="/client_profile">
                 <DropdownMenuItem>
@@ -112,15 +109,13 @@ export function NavUser({ user }) {
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem>
-                <BadgeCheck className="w-4 h-4 mr-2" />
-                Achievements
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <Bell className="w-4 h-4 mr-2" />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem>
               <LogOut className="w-4 h-4 mr-2" />
               Log out

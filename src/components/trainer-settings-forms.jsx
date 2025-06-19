@@ -219,7 +219,7 @@ export function TrainerSettingsForm() {
         <Link to="/">
           <Button variant="outline">Back</Button>
         </Link>
-        <Link to="/">
+        <Link to="/trainer-main">
           <Button type="submit">Save Profile</Button>
         </Link>
       </CardFooter>

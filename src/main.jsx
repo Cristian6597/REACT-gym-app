@@ -18,6 +18,10 @@ import { CreateWorkoutPlanForm } from "./components/create-workout-plan-form.jsx
 import TrainerMain from "./pages/TrainerMain.jsx";
 import { ProtectedClientRoute } from "./layouts/ProtectedClientRoute.jsx";
 import { ProtectedTrainerRoute } from "./layouts/ProtectedTrainerRoute.jsx";
+import ClientProfile from "./components/profile-page-client.jsx";
+import { ProfileSettingsForm } from "./components/profile-settings-forms.jsx";
+import MyWorkouts from "./components/my-workouts.jsx";
+import MyWorkoutsPage from "./pages/MyWorkoutsPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -34,7 +38,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 {/* Rotte solo client */}
                 <Route element={<ProtectedClientRoute />}>
                   <Route path="/" element={<App />} />
-                  <Route path="/client_profile" element={<ProfilePage />} />
+                  <Route path="/client_profile" element={<ClientProfile />} />
+                  <Route path="/my-workouts" element={<MyWorkoutsPage />} />
+                  <Route
+                    path="/edit_client_profile"
+                    element={<ProfilePage />}
+                  />
                   <Route path="/workoutplan" element={<WorkoutPlanPage />} />
                   <Route path="/register-trainer" element={<TrainerPage />} />
                   {/* altre rotte client */}

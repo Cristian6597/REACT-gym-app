@@ -100,7 +100,7 @@ export function FitnessRecepieCarousel() {
         >
           {fitnessRecipes.map((recipe) => (
             <CarouselItem key={recipe.id} className="pl-2 md:pl-4 md:basis-1/3">
-              <Card className="overflow-hidden">
+              <Card className="h-full overflow-hidden aspect-1">
                 <div className="relative w-full h-48">
                   <img
                     src={recipe.image}
@@ -109,7 +109,7 @@ export function FitnessRecepieCarousel() {
                   />
                 </div>
                 <CardContent className="p-4">
-                  <h3 className="text-lg font-semibold">{recipe.title}</h3>
+                  <h3 className="pt-2 text-lg font-semibold">{recipe.title}</h3>
                   <p className="mt-1 text-sm text-gray-500">
                     {recipe.description}
                   </p>

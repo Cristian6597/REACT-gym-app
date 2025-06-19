@@ -125,7 +125,7 @@ export function RegisterForm({ className, ...props }) {
             </div>
             <div className="flex flex-row gap-4">
               <Link className="w-full" to="/login">
-                <Button type="submit" className="w-full">
+                <Button type="button" className="w-full">
                   Back
                 </Button>
               </Link>
