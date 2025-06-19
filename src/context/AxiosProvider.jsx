@@ -14,6 +14,7 @@ const AxiosProvider = ({ children }) => {
   const [firstLoad, setFirstLoad] = useState(false);
 
   useEffect(() => {
+    console.log(import.meta.env.VITE_RENDER_BASE_URL);
     myaxios.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("api_token");
