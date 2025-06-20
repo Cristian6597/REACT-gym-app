@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const axiosContext = createContext();
 
 const myaxios = axios.create({
-  baseURL: import.meta.env.VITE_RENDER_BASE_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Accept: "application/json",
   },
@@ -14,7 +14,7 @@ const AxiosProvider = ({ children }) => {
   const [firstLoad, setFirstLoad] = useState(false);
 
   useEffect(() => {
-    console.log(import.meta.env.VITE_RENDER_BASE_URL);
+    console.log(import.meta.env.VITE_API_URL);
     myaxios.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("api_token");

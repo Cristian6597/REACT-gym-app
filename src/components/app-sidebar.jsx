@@ -116,7 +116,7 @@ export function AppSidebar({ collapsible, ...props }) {
         <div className="flex items-center justify-center w-full gap-2 p-2 border dark:border-[#FF3F3F] border-solid rounded-xl">
           <Dumbbell className="w-5 h-5 dark:text-[#FF3F3F]" />
           <h1 className="text-sm font-semibold whitespace-nowrap group-data-[collapsible=icon]:hidden">
-            FitnessPro
+            CoachConnect
           </h1>
         </div>
       </SidebarHeader>
